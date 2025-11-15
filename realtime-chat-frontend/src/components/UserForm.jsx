@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/chat.css";
 
 export default function UserForm({ onSetUsername }) {
   const [name, setName] = useState("");
@@ -9,24 +10,16 @@ export default function UserForm({ onSetUsername }) {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 w-80">
-      <h1 className="text-2xl font-bold text-center mb-4 text-gray-700">
-        💬 Real-Time Chat
-      </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <div className="app-container">
+      <form className="user-form" onSubmit={handleSubmit}>
+        <h1>💬 Entrar no Chat</h1>
         <input
           type="text"
           placeholder="Digite seu nome..."
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
         />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
-        >
-          Entrar
-        </button>
+        <button type="submit">Entrar</button>
       </form>
     </div>
   );
