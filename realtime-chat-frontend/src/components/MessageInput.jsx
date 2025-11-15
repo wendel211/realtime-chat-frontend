@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/chat.css";
 
 export default function MessageInput({ onSend }) {
   const [text, setText] = useState("");
@@ -10,20 +11,14 @@ export default function MessageInput({ onSend }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form className="chat-input" onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Digite uma mensagem..."
+        placeholder="Digite sua mensagem..."
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="flex-grow border border-gray-300 rounded-md p-2"
       />
-      <button
-        type="submit"
-        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
-      >
-        Enviar
-      </button>
+      <button type="submit">Enviar</button>
     </form>
   );
 }
