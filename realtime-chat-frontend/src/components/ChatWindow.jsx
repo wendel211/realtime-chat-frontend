@@ -3,17 +3,20 @@ import { io } from "socket.io-client";
 import MessageInput from "./MessageInput";
 import "../styles/chat.css";
 
-// 🔹 Instancia o socket uma vez (fora do componente)
 const socket = io("http://localhost:3001", { autoConnect: true });
 
 export default function ChatWindow({ username }) {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    // 🔸 Notifica o servidor quando o usuário entra
-    socket.emit("user_joined", username);
+    if (!username) return;
 
-    // 🔸 Cria funções de listener separadas (pra poder limpar depois)
+    if (!socket.hasJoined) {
+      socket.emit("user_joined", username);
+      socket.hasJoined = true;
+    }
+
+    // 🔹 Recebe mensagens de qualquer usuário (inclusive você)
     const handleReceive = (data) => {
       setMessages((prev) => [...prev, data]);
     };
@@ -25,23 +28,29 @@ export default function ChatWindow({ username }) {
       ]);
     };
 
-    // 🔸 Registra os listeners
+    const handleUserLeft = (user) => {
+      setMessages((prev) => [
+        ...prev,
+        { user: "Sistema", message: `${user} saiu do chat.` },
+      ]);
+    };
+
     socket.on("receive_message", handleReceive);
     socket.on("user_joined", handleUserJoined);
+    socket.on("user_left", handleUserLeft);
 
-    // 🔸 Remove os listeners ao desmontar (evita duplicação)
     return () => {
       socket.off("receive_message", handleReceive);
       socket.off("user_joined", handleUserJoined);
+      socket.off("user_left", handleUserLeft);
     };
-  }, [username]); // roda apenas quando o username muda
+  }, [username]);
 
-  // 🔹 Envia mensagem
+  // 🔸 Envia a mensagem para o servidor (não adiciona localmente!)
   const sendMessage = (text) => {
     if (!text.trim()) return;
     const msg = { user: username, message: text };
     socket.emit("send_message", msg);
-    setMessages((prev) => [...prev, msg]);
   };
 
   return (
