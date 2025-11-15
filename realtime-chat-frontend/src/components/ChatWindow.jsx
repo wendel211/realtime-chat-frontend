@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import MessageInput from "./MessageInput";
+import "../styles/chat.css";
 
 const socket = io("http://localhost:3001");
 
@@ -8,49 +9,57 @@ export default function ChatWindow({ username }) {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    socket.emit("user_joined", username);
+
     socket.on("receive_message", (data) => {
       setMessages((prev) => [...prev, data]);
     });
 
-    return () => socket.off("receive_message");
-  }, []);
+    socket.on("user_joined", (user) => {
+      setMessages((prev) => [
+        ...prev,
+        { user: "Sistema", message: `${user} entrou no chat.` },
+      ]);
+    });
 
-  const sendMessage = (msg) => {
-    if (msg.trim()) {
-      const data = { user: username, message: msg };
-      socket.emit("send_message", data);
-      setMessages((prev) => [...prev, data]);
-    }
+    return () => {
+      socket.off("receive_message");
+      socket.off("user_joined");
+    };
+  }, [username]);
+
+  const sendMessage = (text) => {
+    if (!text.trim()) return;
+    const msg = { user: username, message: text };
+    socket.emit("send_message", msg);
+    setMessages((prev) => [...prev, msg]);
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-md flex flex-col">
-      <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">
-        👋 Olá, {username}!
-      </h2>
+    <div className="app-container">
+      <div className="chat-box">
+        <div className="chat-header">💬 Chat em Tempo Real</div>
 
-      <div className="flex-1 overflow-y-auto border rounded-md p-3 mb-3 h-80">
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`mb-2 ${
-              m.user === username ? "text-right" : "text-left"
-            }`}
-          >
-            <span
-              className={`inline-block px-3 py-1 rounded-lg ${
-                m.user === username
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
-              }`}
+        <div className="chat-messages">
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={
+                m.user === "Sistema"
+                  ? "system-message"
+                  : m.user === username
+                  ? "message self"
+                  : "message other"
+              }
             >
-              <strong>{m.user}:</strong> {m.message}
-            </span>
-          </div>
-        ))}
-      </div>
+              {m.user !== "Sistema" && <strong>{m.user}: </strong>}
+              {m.message}
+            </div>
+          ))}
+        </div>
 
-      <MessageInput onSend={sendMessage} />
+        <MessageInput onSend={sendMessage} />
+      </div>
     </div>
   );
 }
