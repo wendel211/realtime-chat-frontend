@@ -1,0 +1,157 @@
+/* ======== Global ======== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1e1f25;
+  font-family: "Inter", Arial, sans-serif;
+  color: #f1f1f1;
+}
+
+/* ======== Layout ======== */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.chat-box {
+  width: 400px;
+  background: #2b2d33;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #3a3d45;
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #4d4f58;
+  text-align: center;
+}
+
+/* ======== Mensagens ======== */
+.chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message {
+  display: inline-block;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+}
+
+.message.self {
+  align-self: flex-end;
+  background: #4f7cff;
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.message.other {
+  align-self: flex-start;
+  background: #44474f;
+  color: #fff;
+  border-bottom-left-radius: 2px;
+}
+
+.system-message {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin: 6px 0;
+}
+
+/* ======== Input ======== */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #3d4047;
+  background: #2b2d33;
+  padding: 10px;
+  gap: 8px;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  outline: none;
+  font-size: 0.95rem;
+  background: #1e1f25;
+  color: #f1f1f1;
+}
+
+.chat-input button {
+  background: #4f7cff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chat-input button:hover {
+  background: #6d93ff;
+}
+
+/* ======== Tela de Login ======== */
+.user-form {
+  width: 360px;
+  background: #2b2d33;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.user-form h1 {
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.user-form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #1e1f25;
+  color: #f1f1f1;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.user-form button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #4f7cff;
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-form button:hover {
+  background: #6d93ff;
+}
